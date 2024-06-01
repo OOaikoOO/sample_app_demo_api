@@ -5,7 +5,13 @@ class TodolistsController < ApplicationController
 
   def create
     @list = List.new(list_params)
+    # 投稿した画像をAPI側に渡す
+    tags = Vision.get_image_data(list_params[:image])
     if @list.save
+      # APIからの値をもとにタグを作成
+      tags.each do |tag|
+        @list.tags.create(name: tag)
+      end
       redirect_to todolist_path(@list.id)
     else
       render :new
