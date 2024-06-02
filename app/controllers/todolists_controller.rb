@@ -5,6 +5,8 @@ class TodolistsController < ApplicationController
 
   def create
     @list = List.new(list_params)
+    # 投稿した本文をAPI側に渡す
+    @list.score = Language.get_data(list_params[:body]) 
     # 投稿した画像をAPI側に渡す
     tags = Vision.get_image_data(list_params[:image])
     if @list.save
